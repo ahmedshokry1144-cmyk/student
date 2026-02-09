@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>أكاديمية الافوكاتو</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Almarai:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+body{
+  font-family:'Cairo',sans-serif;
+  background:linear-gradient(135deg,#ffe6f0,#d0f0fd);
+  margin:0;
+  color:#333;
+  position:relative;
+  overflow-x:hidden;
+}
+
+/* خلفية ميزان العدالة */
+body::before{
+  content:"";
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:350px;
+  height:350px;
+  background:url('https://upload.wikimedia.org/wikipedia/commons/6/63/Justice_Scales.svg') no-repeat center center;
+  background-size:contain;
+  opacity:0.05;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* الهيدر */
+header{
+  padding:30px 20px;
+  text-align:center;
+  position:relative;
+  z-index:1;
+}
+header h1{
+  font-family:'Almarai',sans-serif;
+  font-size:3rem;
+  font-weight:900;
+  letter-spacing:2px;
+  animation:colorCycle 6s linear infinite;
+}
+header h3{
+  font-size:1.3rem;
+  margin-top:5px;
+  font-weight:400;
+}
+
+/* تغيير الألوان لكلمة الافوكاتو */
+@keyframes colorCycle{
+  0%{color:#ff3d00;}
+  25%{color:#ff9800;}
+  50%{color:#4caf50;}
+  75%{color:#2196f3;}
+  100%{color:#ff3d00;}
+}
+
+/* جملة متغيرة فوق الفرق */
+#animatedText{
+  text-align:center;
+  font-size:1.5rem;
+  font-weight:700;
+  margin:20px 0;
+  height:50px;
+  overflow:hidden;
+  color:#2a3eb1;
+  position:relative;
+  z-index:1;
+}
+.animated-word{
+  position:absolute;
+  width:100%;
+  opacity:0;
+  animation:wordsAnim 9s infinite;
+  text-align:center;
+}
+.animated-word:nth-child(1){animation-delay:0s;}
+.animated-word:nth-child(2){animation-delay:3s;}
+.animated-word:nth-child(3){animation-delay:6s;}
+@keyframes wordsAnim{
+  0%,20%{opacity:0;transform:translateY(40px);}
+  25%,45%{opacity:1;transform:translateY(0);}
+  50%,100%{opacity:0;transform:translateY(-40px);}
+}
+
+/* نص ادخل شوف ترتيبك */
+#enterText{text-align:center;font-size:1.5rem;font-weight:700;margin-bottom:20px;color:#2a3eb1;position:relative;z-index:1;}
+
+/* بطاقات الفرق */
+.groups{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:25px;
+  margin-top:20px;
+  position:relative;
+  z-index:1;
+  perspective:1000px;
+}
+.group{
+  border-radius:20px;
+  padding:30px;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  transition:.5s;
+  font-weight:700;
+  background:linear-gradient(135deg,#ffd1dc,#ff8fa3);
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+  color:#fff;
+}
+.group i{
+  font-size:3rem;
+  margin-bottom:10px;
+  transition:.5s;
+}
+.group:hover{
+  transform:rotateY(15deg) rotateX(5deg) translateY(-10px) scale(1.05);
+  background:linear-gradient(135deg,#00c6ff,#0072ff);
+}
+.group.selected{background:#2a5298;}
+.group.selected i{color:#fff;}
+
+/* الصفحات */
+.page{display:none;padding:20px;position:relative;z-index:1;}
+.active{display:block;}
+
+/* أزرار */
+button{padding:10px 22px;border:none;border-radius:12px;cursor:pointer;font-family:'Cairo';transition:.3s;}
+button:hover{transform:scale(1.05);}
+.admin-btn{background:#e91e63;color:#fff;}
+.back-btn{background:#777;color:#fff;}
+
+/* جدول الطلاب */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+  background:#fff;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 8px 25px rgba(0,0,0,.1);
+}
+th,td{
+  padding:12px;
+  border-bottom:1px solid #eee;
+  text-align:center;
+}
+th{
+  background:linear-gradient(135deg,#2196f3,#21cbf3);
+  color:#fff;
+  font-weight:700;
+}
+td.total{
+  font-weight:700;
+  color:#ff3d00;
+  font-size:1.2rem;
+}
+
+/* Inputs لوحة التحكم */
+input,select{
+  padding:8px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-family:'Cairo';
+  margin-right:5px;
+  margin-bottom:8px;
+}
+
+/* مودال الحظر */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+.modal-box{
+  background:#fff;
+  padding:25px;
+  border-radius:20px;
+  width:90%;
+  max-width:400px;
+  text-align:center;
+}
+.timer{font-weight:bold;color:#e91e63;margin-top:10px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>أكاديمية الافوكاتو</h1>
+  <h3>د/ مصطفى عبدالعال</h3>
+</header>
+
+<div id="home" class="page active">
+  <div id="animatedText">
+    <div class="animated-word">مسابقات – تحدي – تميز</div>
+    <div class="animated-word">كن انت الطالب المتميز</div>
+    <div class="animated-word">أكاديمية الافوكاتو</div>
+  </div>
+
+  <div id="enterText">ادخل شوف ترتيبك</div>
+
+  <div class="groups">
+    <div class="group" onclick="openGroup(0)"><i class="fa-solid fa-star"></i>الفرقة الأولى</div>
+    <div class="group" onclick="openGroup(1)"><i class="fa-solid fa-gem"></i>الفرقة الثانية</div>
+    <div class="group" onclick="openGroup(2)"><i class="fa-solid fa-crown"></i>الفرقة الثالثة</div>
+    <div class="group" onclick="openGroup(3)"><i class="fa-solid fa-rocket"></i>الفرقة الرابعة</div>
+  </div>
+
+  <button class="admin-btn" onclick="openAdmin()">لوحة التحكم</button>
+</div>
+
+<!-- صفحة الطلاب -->
+<div id="students" class="page">
+  <h3>الطالب المتميز</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>الترتيب</th><th>اسم الطالب</th><th>محاضرات</th><th>3 محاضرات</th><th>اختبارات</th><th>المجموع</th>
+      </tr>
+    </thead>
+    <tbody id="studentsTable"></tbody>
+  </table>
+  <br><button class="back-btn" onclick="goHome()">رجوع</button>
+</div>
+
+<!-- لوحة التحكم -->
+<div id="admin" class="page">
+  <h3>لوحة التحكم</h3>
+  <select id="groupSelect" onchange="renderAdmin()">
+    <option value="0">الفرقة الأولى</option>
+    <option value="1">الفرقة الثانية</option>
+    <option value="2">الفرقة الثالثة</option>
+    <option value="3">الفرقة الرابعة</option>
+  </select>
+
+  <table>
+    <thead>
+      <tr>
+        <th>الاسم</th><th>محاضرات</th><th>3 محاضرات</th><th>اختبارات</th><th>المجموع</th>
+      </tr>
+    </thead>
+    <tbody id="adminTable"></tbody>
+  </table>
+
+  <h4>إضافة طالب</h4>
+  <input id="nName" placeholder="اسم الطالب">
+  <input id="nl" type="number" placeholder="محاضرات">
+  <input id="nt" type="number" placeholder="3 محاضرات">
+  <input id="ng" type="number" placeholder="اختبارات">
+  <br><br>
+  <button class="admin-btn" onclick="addStudent()">حفظ</button>
+  <br><br>
+  <button class="back-btn" onclick="goHome()">رجوع</button>
+</div>
+
+<!-- مودال الحظر -->
+<div class="modal" id="blockModal">
+  <div class="modal-box">
+    <h3 id="modalMsg"></h3>
+    <div class="timer" id="timer"></div>
+    <br><button class="back-btn" onclick="closeModal()">تمام</button>
+  </div>
+</div>
+
+<script>
+// بيانات الطلاب جديدة
+let data = [[],[],[],[]];
+let tries = 0;
+let blockedUntil = 0;
+let currentGroup = 0;
+let timerInterval;
+
+// الصفحات
+function show(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById(id).classList.add("active");}
+function goHome(){show("home");}
+
+// الطلاب
+function openGroup(g){
+  currentGroup=g;
+  const body=document.getElementById("studentsTable");
+  body.innerHTML="";
+  data[g].sort((a,b)=>b.total-a.total).forEach((s,i)=>{
+    body.innerHTML+=`<tr>
+      <td>${i+1}</td><td>${s.name}</td><td>${s.l}</td><td>${s.t}</td><td>${s.g}</td><td class="total">${s.total}</td>
+    </tr>`;
+  });
+  show("students");
+}
+
+// لوحة التحكم
+function openAdmin(){
+  if(Date.now()<blockedUntil){showBlockModal("انت محظور 😎",blockedUntil); return;}
+  const pass = prompt("ادخل كلمة المرور");
+  if(pass==="6742981"){
+    tries=0; blockedUntil=0; renderAdmin(); show("admin");
+  }else{
+    tries++;
+    if(tries===1) alert("خلاااااص ياعم عرفنا إنك مش الدكتور 🤣");
+    else if(tries===2) alert("انت مصمم بقى يعم؟ 😅");
+    else if(tries===3) alert("برضو مش هتعرف تدخل 😂");
+    else if(tries===4) alert("لسه بتجرب؟ 😆");
+    else if(tries===5){blockedUntil=Date.now()+86400000; showBlockModal("اتحظرت 24 ساعة 😂",blockedUntil);}
+  }
+}
+
+function showBlockModal(msg,time){
+  document.getElementById("modalMsg").innerText=msg;
+  document.getElementById("blockModal").style.display="flex";
+  updateTimer(time);
+  timerInterval=setInterval(()=>updateTimer(time),1000);
+}
+function updateTimer(time){
+  let diff=time-Date.now();
+  if(diff<=0){closeModal();blockedUntil=0;return;}
+  let h=Math.floor(diff/3600000); let m=Math.floor(diff%3600000/60000); let s=Math.floor(diff%60000/1000);
+  document.getElementById("timer").innerText=`فاضل ${h}س ${m}د ${s}ث`;
+}
+function closeModal(){document.getElementById("blockModal").style.display="none"; clearInterval(timerInterval);}
+
+// Admin
+function renderAdmin(){
+  const g=groupSelect.value;
+  const body=document.getElementById("adminTable");
+  body.innerHTML="";
+  data[g].sort((a,b)=>b.total-a.total).forEach((s,i)=>{
+    body.innerHTML+=`<tr>
+      <td>${s.name}</td>
+      <td><input type="number" value="${s.l}" onchange="update(${g},${i},'l',this.value)"></td>
+      <td><input type="number" value="${s.t}" onchange="update(${g},${i},'t',this.value)"></td>
+      <td><input type="number" value="${s.g}" onchange="update(${g},${i},'g',this.value)"></td>
+      <td class="total">${s.total}</td>
+    </tr>`;
+  });
+}
+function update(g,i,k,v){data[g][i][k]=+v;data[g][i].total=data[g][i].l+data[g][i].t+data[g][i].g;renderAdmin();}
+function addStudent(){const g=groupSelect.value;if(!nName.value.trim()) return alert("اكتب الاسم");const l=+nl.value||0,t=+nt.value||0,gg=+ng.value||0;data[g].push({name:nName.value,l,t,g:gg,total:l+t+gg});nName.value=nl.value=nt.value=ng.value="";renderAdmin();}
+</script>
+</body>
+</html>
